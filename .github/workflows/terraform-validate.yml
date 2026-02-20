@@ -1,0 +1,42 @@
+name: Terraform Validate (PR -> develop)
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  terraform-validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/atlas
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Terraform fmt (check)
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform plan
+        env:
+          TF_VAR_mongodb_atlas_public_key: ${{ secrets.MONGODB_ATLAS_PUBLIC_KEY }}
+          TF_VAR_mongodb_atlas_private_key: ${{ secrets.MONGODB_ATLAS_PRIVATE_KEY }}
+          TF_VAR_mongodb_atlas_org_id: ${{ secrets.MONGODB_ATLAS_ORG_ID }}
+        run: terraform plan -input=false -no-color
