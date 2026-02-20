@@ -20,12 +20,12 @@ resource "mongodbatlas_project" "this" {
 }
 
 resource "mongodbatlas_cluster" "this" {
-  project_id                 = mongodbatlas_project.this.id
-  name                       = var.mongodb_atlas_cluster_name
-  cluster_type               = "REPLICASET"
-  mongo_db_major_version     = var.mongodb_atlas_mongodb_major_version
-  provider_name              = "AWS"
-  provider_region_name       = var.mongodb_atlas_aws_region
+  project_id                  = mongodbatlas_project.this.id
+  name                        = var.mongodb_atlas_cluster_name
+  cluster_type                = "REPLICASET"
+  mongo_db_major_version      = var.mongodb_atlas_mongodb_major_version
+  provider_name               = "AWS"
+  provider_region_name        = var.mongodb_atlas_aws_region
   provider_instance_size_name = var.mongodb_atlas_instance_size
 
   auto_scaling_disk_gb_enabled = true
